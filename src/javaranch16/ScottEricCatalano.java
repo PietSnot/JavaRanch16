@@ -8,6 +8,7 @@ package javaranch16;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -32,20 +33,60 @@ public class ScottEricCatalano {
     }
 }
 
+//*******************************************************************
 class FrameTester {
-    JFrame frame2;
+//*******************************************************************
+    JFrame main, secondFrame;
     JButton button;
     
+    //--------------------------------------------------
     FrameTester() {
-        JFrame main = new JFrame("main");
+        createMainFrame();
+        createSecondFrame();
+        createWindowAdapter();
+        main.setVisible(true);
+    }
+    
+    //--------------------------------------------------
+    private void processClick(ActionEvent e) {
+        if (secondFrame.isShowing()) {
+            secondFrame.setVisible(false);
+            button.setText("click to open second frame");
+        }
+        else {
+            secondFrame.setVisible(true);
+            button.setText("click to close second frame");
+        }
+    }
+    
+   //--------------------------------------------------
+   private void createMainFrame() {
+        main = new JFrame("main");
         Container c = main.getContentPane();
         c.setLayout(new FlowLayout());
         c.setBackground(Color.yellow);
+        
         button = new JButton("click to open second frame");
         c.add(button);
         button.addActionListener(this::processClick);
-        
-        frame2 = new JFrame("second frame");
+        WindowAdapter wa = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                System.out.println("frame2 closing....");
+                secondFrame.dispose();
+                System.out.println("shutting down...");
+                System.exit(0);
+            }
+        };
+        main.addWindowListener(wa);
+        main.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        main.setSize(300, 100);
+        main.setLocationRelativeTo(null);
+    }
+    
+    //--------------------------------------------------
+    private void createSecondFrame() {
+        secondFrame = new JFrame("second frame");
         File f = new File("D:\\Piets fotoos\\2006-07-22 001.jpg");
         BufferedImage buf;
         try {
@@ -61,34 +102,31 @@ class FrameTester {
                 g.drawImage(buf, 0, 0, this.getWidth(), this.getHeight(), null);
             }
         };
-        frame2.setContentPane(panel);
-        
-        main.setSize(300, 100);
-        frame2.setSize(100, 100);
-        frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        
+        secondFrame.setContentPane(panel);
+        secondFrame.setSize(100, 100);
+        secondFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    }
+    
+    //--------------------------------------------------
+    private void createWindowAdapter() {
         WindowAdapter wa = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent we) {
                 System.out.println("frame2 closing....");
-                frame2.setVisible(false);
+                secondFrame.setVisible(false);
                 button.setText("click to open second frame");
             }
+            @Override
+            public void windowIconified(WindowEvent we) {
+                System.out.println("frame2 iconified....");
+                button.setText("use the taskbar to open second frame");
+            }
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                System.out.println("second frame de-iconified....");
+                button.setText("click to close frame2...");
+            }
         };
-        frame2.addWindowListener(wa);
-        main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        main.setLocationRelativeTo(null);
-        main.setVisible(true);
-    }
-    
-    private void processClick(ActionEvent e) {
-        if (frame2.isShowing()) {
-            frame2.setVisible(false);
-            button.setText("click to open second frame");
-        }
-        else {
-            frame2.setVisible(true);
-            button.setText("click to close second frame");
-        }
+        secondFrame.addWindowListener(wa);
     }
 }

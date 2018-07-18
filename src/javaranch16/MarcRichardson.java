@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -37,6 +39,15 @@ public class MarcRichardson {
             )
         );
         dateMap.entrySet().forEach(System.out::println);
+        System.out.println("****************************");
+        dateMap.forEach((k, v) -> {
+            System.out.println(k);
+            System.out.println( v.stream()
+                .sorted()
+                .map(s -> s.toString())
+                .collect(joining(" == ", "==>  ", "  <=="))
+            );
+        });
         System.out.println(dateMap.values().stream().mapToInt(List::size).sum());
     }
     

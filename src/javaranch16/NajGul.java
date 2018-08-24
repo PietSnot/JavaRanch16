@@ -6,6 +6,7 @@
 package javaranch16;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -33,7 +34,7 @@ public class NajGul {
  
         System.out.println(list.stream().max((a, b) -> a > b ? a : b).get()); //10
         System.out.println(list.stream().max(Integer::compare).get()); //10
-        System.out.println(list.stream().min((a, b) -> a > b ? a : b).get());  //2 
+        System.out.println(list.stream().min((a, b) -> a > b ? 1 : -1).get());  //2 
     }
 }
 

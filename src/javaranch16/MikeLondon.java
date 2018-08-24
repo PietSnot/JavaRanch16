@@ -6,14 +6,19 @@
 
 package javaranch16;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import java.util.stream.IntStream;
 
 /**
@@ -24,8 +29,33 @@ public class MikeLondon {
     public static void main(String... args) {
         Collection<String> strings = Arrays.asList("aap", "noot", "mies", "wim");
         Set<Integer> ints = IntStream.rangeClosed(1, 5).boxed().collect(toCollection(HashSet::new));
-        List<Tuple<Object, Number>> result = Zip.zip(strings, ints);
+        var result = Zip.zip(strings, ints);
         result.forEach(System.out::println);
+        var one = new Word("one");
+        var two = new Word("one");
+        var words = List.of(one, two);
+//        var map = words.stream().collect(toMap(Word::getText, Function.identity()));
+        Map<String, List<Word>> map2 = words.stream().collect(Collectors.groupingBy(Word::getText));
+        map2.entrySet().forEach(System.out::println);
+        
+    }
+    
+    static class Word {
+        final private String text;
+        
+        public String getText() {
+            return text;
+        }
+        
+        public Word(String text) {
+//            if (text == null || text.isEmpty()) throw new IllegalArgumentException("Please enter a decent word");
+            this.text = text;
+        }
+        
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 }
 

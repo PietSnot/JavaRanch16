@@ -83,10 +83,8 @@ public class CarlAnton {
     }
     
     private static void characterize(int[] a) {
-        
-    }
-    
-    private static enum Group {
-        
+        // wanted to do a grouping to get an indication of what a looks like,
+        // but the range (Integer.MIN to Integer.MAX) is too big to do it 
+        // in a short way
     }
 }
